@@ -30,70 +30,87 @@ if __name__ == "__main__":
 	eth_header = pack('!6B6BH', dst_mac[0], dst_mac[1], dst_mac[2], dst_mac[3], dst_mac[4], dst_mac[5], 
 		src_mac[0], src_mac[1], src_mac[2], src_mac[3], src_mac[4], src_mac[5], 0x0800)
 	
-	source_ip = '192.168.1.101'
-	dest_ip = '192.168.1.1'			# or socket.gethostbyname('www.google.com')
+	source_ip = '2001:172:22:5::31'
+	dest_ip = '2014:2008:0:c::284a:78a4'			# or socket.gethostbyname('www.google.com')
 	 
-	# ip header fields
-	ihl = 5
-	version = 4
-	ihl_version = (version << 4) + ihl
-	tos = 0
-	tot_len = 20 + 20			# IP + TCP
-	id = 54321  #Id of this packet
-	frag_off = 0
-	ttl = 255
-	protocol = socket.IPPROTO_TCP
-	check = 0
-	saddr = socket.inet_aton(source_ip)
-	daddr = socket.inet_aton(dest_ip)
-	
-	# the ! in the pack format string means network order
-	ip_header = pack('!BBHHHBBH4s4s' , ihl_version, tos, tot_len, id, frag_off, ttl, protocol, check, saddr, daddr)
-	check = checksum(ip_header)
-	
-	# build the final ip header (with checksum)
-	ip_header = pack('!BBHHHBBH4s4s' , ihl_version, tos, tot_len, id, frag_off, ttl, protocol, check, saddr, daddr)
-	 
-	# tcp header fields
-	source = 1234   # source port
-	dest = 80   # destination port
-	seq = 0
-	ack_seq = 0
-	doff = 5    #4 bit field, size of tcp header, 5 * 4 = 20 bytes
-	#tcp flags
-	fin = 0
-	syn = 1
-	rst = 0
-	psh = 0
-	ack = 0
-	urg = 0
-	window = socket.htons(5840)		# maximum allowed window size
-	check = 0
-	urg_ptr = 0
-	 
-	offset_res = (doff << 4) + 0
-	tcp_flags = fin + (syn << 1) + (rst << 2) + (psh <<3) + (ack << 4) + (urg << 5)
-	 
-	# the ! in the pack format string means network order
-	tcp_header = pack('!HHLLBBHHH' , source, dest, seq, ack_seq, offset_res, tcp_flags,  window, check, urg_ptr)
-	 
-	# pseudo header fields
-	source_address = socket.inet_aton( source_ip )
-	dest_address = socket.inet_aton(dest_ip)
-	placeholder = 0
-	protocol = socket.IPPROTO_TCP
-	tcp_length = len(tcp_header)
-	 
-	psh = pack('!4s4sBBH' , source_address , dest_address , placeholder , protocol , tcp_length);
-	psh = psh + tcp_header;
-	 
-	tcp_checksum = checksum(psh)
-	 
-	# make the tcp header again and fill the correct checksum
-	tcp_header = pack('!HHLLBBHHH' , source, dest, seq, ack_seq, offset_res, tcp_flags,  window, tcp_checksum , urg_ptr)
-	 
-	# final full packet - syn packets dont have any data
-	packet = eth_header + ip_header + tcp_header
-	r = sendeth(packet, "enp1s0")
-	
-	print("Sent %d bytes" % r)
+	# # ip header fields
+	# ihl = 5
+	# version = 4
+	# ihl_version = (version << 4) + ihl
+	# tos = 0
+	# tot_len = 20 + 20			# IP + TCP
+	# id = 54321  #Id of this packet
+	# frag_off = 0
+	# ttl = 255
+	# protocol = socket.IPPROTO_TCP
+	# check = 0
+	# saddr = socket.inet_aton(source_ip)
+	# daddr = socket.inet_aton(dest_ip)
+
+# ipv6 header fields
+    
+version     = 6                       #4 bit
+traffic_class = 0                     #8 bit
+flow_level  = 1                       #20 bit
+payload_len = 20 #not true lenght, I just selected a random value        #16 bit
+next_header = socket.IPPROTO_TCP      #8 bit
+hop_limit   = 255                     #8 bit
+saddr = socket.inet_pton ( socket.AF_INET6, source_ip )  #128 bit
+daddr = socket.inet_pton ( socket.AF_INET6, dest_ip   )  #128 bit
+
+ver_traff_flow = (version << 8) + traffic_class
+ver_traff_flow = (ver_traff_flow << 20) + flow_level
+
+ip_header = pack( '!IHBB', ver_traff_flow, payload_len, next_header, hop_limit)
+ip_header = ip_header + saddr + daddr
+
+# # the ! in the pack format string means network order
+# ip_header = pack('!BBHHHBBH4s4s' , ihl_version, tos, tot_len, id, frag_off, ttl, protocol, check, saddr, daddr)
+# check = checksum(ip_header)
+
+# # build the final ip header (with checksum)
+# ip_header = pack('!BBHHHBBH4s4s' , ihl_version, tos, tot_len, id, frag_off, ttl, protocol, check, saddr, daddr)
+    
+# tcp header fields
+source = 1234   # source port
+dest = 80   # destination port
+seq = 0
+ack_seq = 0
+doff = 5    #4 bit field, size of tcp header, 5 * 4 = 20 bytes
+#tcp flags
+fin = 0
+syn = 1
+rst = 0
+psh = 0
+ack = 0
+urg = 0
+window = socket.htons(5840)		# maximum allowed window size
+check = 0
+urg_ptr = 0
+    
+offset_res = (doff << 4) + 0
+tcp_flags = fin + (syn << 1) + (rst << 2) + (psh <<3) + (ack << 4) + (urg << 5)
+    
+# the ! in the pack format string means network order
+tcp_header = pack('!HHLLBBHHH' , source, dest, seq, ack_seq, offset_res, tcp_flags,  window, check, urg_ptr)
+    
+# pseudo header fields
+source_address = socket.inet_aton( source_ip )
+dest_address = socket.inet_aton(dest_ip)
+placeholder = 0
+protocol = socket.IPPROTO_TCP
+tcp_length = len(tcp_header)
+    
+psh = pack('!4s4sBBH' , source_address , dest_address , placeholder , protocol , tcp_length);
+psh = psh + tcp_header;
+    
+tcp_checksum = checksum(psh)
+    
+# make the tcp header again and fill the correct checksum
+tcp_header = pack('!HHLLBBHHH' , source, dest, seq, ack_seq, offset_res, tcp_flags,  window, tcp_checksum , urg_ptr)
+    
+# final full packet - syn packets dont have any data
+packet = eth_header + ip_header + tcp_header
+r = sendeth(packet, "enp0s3")
+
+print("Sent %d bytes" % r)
