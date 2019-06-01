@@ -22,7 +22,7 @@ def checksum(msg):
  
 
 if __name__ == "__main__":
-	# src=fe:ed:fa:ce:be:ef, dst=52:54:00:12:35:02, type=0x0800 (IP)
+	# src=fe:ed:fa:ce:be:ef, dst=52:54:00:12:35:02, type=0x86DD (IPv6)
 	dst_mac = [0xff, 0xff, 0xff, 0xff, 0xff, 0xff]
 	src_mac = [0x00, 0x0a, 0x11, 0x11, 0x22, 0x22]
 	
@@ -32,20 +32,6 @@ if __name__ == "__main__":
 	
 	source_ip = '2001:172:22:5::31'
 	dest_ip = '2014:2008:0:c::284a:78a4'			# or socket.gethostbyname('www.google.com')
-	 
-	# # ip header fields
-	# ihl = 5
-	# version = 4
-	# ihl_version = (version << 4) + ihl
-	# tos = 0
-	# tot_len = 20 + 20			# IP + TCP
-	# id = 54321  #Id of this packet
-	# frag_off = 0
-	# ttl = 255
-	# protocol = socket.IPPROTO_TCP
-	# check = 0
-	# saddr = socket.inet_aton(source_ip)
-	# daddr = socket.inet_aton(dest_ip)
 
 # ipv6 header fields
     
@@ -63,13 +49,6 @@ ver_traff_flow = (ver_traff_flow << 20) + flow_level
 
 ip_header = pack( '!IHBB', ver_traff_flow, payload_len, next_header, hop_limit)
 ip_header = ip_header + saddr + daddr
-
-# # the ! in the pack format string means network order
-# ip_header = pack('!BBHHHBBH4s4s' , ihl_version, tos, tot_len, id, frag_off, ttl, protocol, check, saddr, daddr)
-# check = checksum(ip_header)
-
-# # build the final ip header (with checksum)
-# ip_header = pack('!BBHHHBBH4s4s' , ihl_version, tos, tot_len, id, frag_off, ttl, protocol, check, saddr, daddr)
     
 # tcp header fields
 source = 1234   # source port
