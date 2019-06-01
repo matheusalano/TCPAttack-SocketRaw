@@ -95,13 +95,13 @@ tcp_flags = fin + (syn << 1) + (rst << 2) + (psh <<3) + (ack << 4) + (urg << 5)
 tcp_header = pack('!HHLLBBHHH' , source, dest, seq, ack_seq, offset_res, tcp_flags,  window, check, urg_ptr)
     
 # pseudo header fields
-source_address = socket.inet_aton( source_ip )
-dest_address = socket.inet_aton(dest_ip)
+source_address = socket.inet_pton( socket.AF_INET6, source_ip )
+dest_address = socket.inet_pton( socket.AF_INET6, dest_ip )
 placeholder = 0
 protocol = socket.IPPROTO_TCP
 tcp_length = len(tcp_header)
     
-psh = pack('!4s4sBBH' , source_address , dest_address , placeholder , protocol , tcp_length);
+psh = source_address + dest_address + pack('!BBH' , placeholder , protocol , tcp_length);
 psh = psh + tcp_header;
     
 tcp_checksum = checksum(psh)
