@@ -28,7 +28,7 @@ if __name__ == "__main__":
 	
 	# Ethernet header
 	eth_header = pack('!6B6BH', dst_mac[0], dst_mac[1], dst_mac[2], dst_mac[3], dst_mac[4], dst_mac[5], 
-		src_mac[0], src_mac[1], src_mac[2], src_mac[3], src_mac[4], src_mac[5], 0x0800)
+		src_mac[0], src_mac[1], src_mac[2], src_mac[3], src_mac[4], src_mac[5], 0x86DD)
 	
 	source_ip = '2001:172:22:5::31'
 	dest_ip = '2014:2008:0:c::284a:78a4'			# or socket.gethostbyname('www.google.com')
