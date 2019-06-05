@@ -98,21 +98,17 @@ def send():
 def receive():
     s = socket.socket(AF_PACKET, SOCK_RAW, socket.htons(ETH_P_ALL))
     s.bind((interface, 0))
-    print('Entrou receive')
 
     while True:
         data, src_addr = s.recvfrom(1600)
-        print('recebeu data')
-        #ip_data = data << 14
-        (ver_traff_flow, payload_len, next_header, hop_limit) = unpack_from('!IHBB', data, 14)
         
-        src = data[0] << 18
-        print(payload_len)
-        return
-        src_string = socket.inet_ntop(socket.AF_INET6, src[:16])
+        (ver_traff_flow, payload_len, next_header, hop_limit) = unpack_from('!IHBB', data, 14) #offset de 14 bytes
 
-        dst = data[0] << 34
-        dst_string = socket.inet_ntop(socket.AF_INET6, dst[:16])
+        src_offset = data[22:] # data com offset de 22 (14 de ethernet + 8 de coisas do ipv6)
+        src_string = socket.inet_ntop(socket.AF_INET6, src_offset[:16]) # pega os 16 bytes e converte pra string
+
+        dst_offset = data[38:] # data com offset de 22 (14 de ethernet + 8 de coisas do ipv6 + 16 de source)
+        dst_string = socket.inet_ntop(socket.AF_INET6, dst_offset[:16]) # pega os 16 bytes e converte pra string
 
         print('source: ', src_string)
         print('destination: ', dst_string)
