@@ -92,12 +92,12 @@ def send(source: Host, dest: Host, flags: TCPFlags):
     r = s.send(packet)
     print("Sent %d bytes" % r)
 
-def receive():
+def receive(port):
     s = socket.socket(AF_PACKET, SOCK_RAW, socket.htons(ETH_P_ALL))
     s.bind((interface, 0))
 
     while True:
-        data, src_addr = s.recvfrom(1600)
+        (data, src_addr) = s.recvfrom(1600)
         
         (ver_traff_flow, payload_len, next_header, hop_limit) = unpack_from('!IHBB', data, 14) #offset de 14 bytes
 
@@ -107,8 +107,11 @@ def receive():
         dst_offset = data[38:] # data com offset de 22 (14 de ethernet + 8 de coisas do ipv6 + 16 de source)
         dst_string = socket.inet_ntop(socket.AF_INET6, dst_offset[:16]) # pega os 16 bytes e converte pra string
 
-        print('source: ', src_string)
-        print('destination: ', dst_string)
+        tcp_offset = data[54:]
+        (sourcePort, destPort, seq, ack_seq, offset_res, tcp_flags,  window, tcp_checksum , urg_ptr) = unpack('!HHLLBBHHH', tcp_offset)
+
+        if port == sourcePort:
+            return tcp_flags
 
 
         
