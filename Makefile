@@ -8,8 +8,8 @@ tests:
 run:
 	python3 runner.py $(type)
 
-run-server:
+run-attack:
 	python3 runner.py 0
 
-run-client:
+run-defense:
 	python3 runner.py 1
