@@ -1,12 +1,7 @@
 from src.sockets import RawSocket
 from src.host import Host
 from src.tcpFlags import TCPFlags
-
-SYN = 2
-ACK = 16
-SYNACK = 18
-RST = 4
-FIN = 1
+from src.constants import *
 
 sourceMAC = [0x08, 0x00, 0x27, 0x10, 0x52, 0x48]
 sourceIP = '2804:14d:4c84:9530:a00:27ff:fe10:5248'#'fe80::a00:27ff:fe10:5248'
@@ -62,7 +57,7 @@ def tcp_stealth_scan(port):
     socket.send(source, dest, fin)
 
     received_flags = socket.receive(dest)
-    if received_flags == RST:
+    if received_flags == RSTACK:
         print('PORTA FECHADA')
     else:
         print('PORTA ABERTA')
