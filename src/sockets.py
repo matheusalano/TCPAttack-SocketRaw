@@ -12,6 +12,7 @@ class RawSocket:
     def __init__(self):
         self.s = socket.socket(AF_PACKET, SOCK_RAW, socket.htons(ETH_P_ALL))
         self.s.bind((NETWORK_INTERFACE, 0))
+        self.s.settimeout(1.3)
 
     def send(self, source: Host, dest: Host, flags: TCPFlags):
         # Ethernet header
@@ -30,7 +31,10 @@ class RawSocket:
     def receive(self, attackedHost: Host):
 
         while True:
-            data = self.s.recv(65565)
+            try:
+                data = self.s.recv(65565)
+            except socket.timeout:
+                return ACK
             
             if data[12:][:2] != b'\x86\xdd': #Valida se o tipo do pacote ethernet é IPv6
                 continue
