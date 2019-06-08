@@ -9,11 +9,11 @@ RST = 4
 FIN = 1
 
 sourceMAC = [0x08, 0x00, 0x27, 0x10, 0x52, 0x48]
-sourceIP = 'fe80::a00:27ff:fe10:5247'
-sourcePort = 1234
+sourceIP = '2804:14d:4c84:9530:a00:27ff:fe10:5248'#'fe80::a00:27ff:fe10:5248'
+sourcePort = 3000
 
-destMAC = [0x08, 0x00, 0x27, 0x10, 0x52, 0x48]
-destIP = '::1'
+destMAC = [0x8c, 0x85, 0x90, 0x43, 0xba, 0x9f] # 8c:85:90:43:ba:9f
+destIP = '2804:14d:4c84:9530:149f:ba6e:2008:5864'
 
 def tcp_connect(port):
 
@@ -24,7 +24,7 @@ def tcp_connect(port):
 
     socket.send(source, dest, syn)
 
-    received_flags = socket.receive(port)
+    received_flags = socket.receive(destMAC, destIP, port)
     if received_flags == SYNACK:
         ack = TCPFlags(0, 0, 0, 0, 1, 0)
         socket.send(source, dest, ack)
