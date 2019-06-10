@@ -2,10 +2,10 @@ import sys, socket
 import pprint
 from socket import AF_PACKET, SOCK_RAW
 from struct import *
-from src.host import Host
-from src.tcpFlags import TCPFlags
+from src.attack_app.host import Host
+from src.attack_app.tcpFlags import TCPFlags
 from src.constants import *
-from src.packer import packing_ethernet_header, packing_ip_header, packing_tcp_header
+from src.attack_app.packer import packing_ethernet_header, packing_ip_header, packing_tcp_header
 
 class RawSocket:
 
