@@ -1,6 +1,7 @@
 # GLOBAL CONFIG
 NETWORK_INTERFACE = "enp0s3"
 ETH_P_ALL = 3
+IPV6 = b'\x86\xdd'
 
 # TCP FLAGS
 SYN = 2

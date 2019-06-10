@@ -11,7 +11,7 @@ def packing_ip_header(source, dest):
     version = 6                           #4 bit
     traffic_class = 0                     #8 bit
     flow_level  = 1                       #20 bit
-    payload_len = 20 #not true lenght, I just selected a random value        #16 bit
+    payload_len = 20                      #not true lenght, I just selected a random value        #16 bit
     next_header = socket.IPPROTO_TCP      #8 bit
     hop_limit   = 255                     #8 bit
     saddr = socket.inet_pton ( socket.AF_INET6, source.ip )  #128 bit

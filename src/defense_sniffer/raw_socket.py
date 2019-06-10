@@ -16,19 +16,38 @@ def start_socket():
         # extract packets with the help of Unpacker.unpack class 
         unpack = Unpacker.unpack()
 
-        print ("\n[+] ------------ Ethernet Header----- [+]")
+        print ("\n[+] ------------ Ethernet Header OK----- [+]")
         # print data on terminal
-        for i in unpack.eth_header(packet[0][0:14]).items():
-            a,b=i
-            print ("{} : {} | ".format(a,b))
+        eth_header = unpack.eth_header(packet[0][0:14])
+        if eth_header['protocol'] == IPV6:
+            print("VALID ETHERNET PACKET IPV6")
+        
+        # Debug print
+        # for i in eth_header.items():
+        #     a,b=i
+        #     print ("{} : {} | ".format(a,b))
+        
 
 
-        print ("\n[+] ------------ IP Header ------------[+]")
-        for i in unpack.ip_header(packet[0][14:54]).items():
-            a,b=i
-            print ("{} : {} | ".format(a,b))
+        print ("\n[+] ------------ IP Header OK ------------[+]")
+        ip_header = unpack.ip_header(packet[0][14:54])
+        
+        print("attacking ip address:", ip_header["src_ip"])
+        # Debug print 
+        # for i in ip_header.items():
+        #     a,b=i
+        #     print ("{} : {} | ".format(a,b))
 
-        print ("\n[+] ------------ Tcp Header ----------- [+]")
-        for  i in unpack.tcp_header(packet[0][54:73]).items():
-            a,b=i
-            print ("{} : {} | ".format(a,b))
+        next_header = ip_header["next_header"]
+        if next_header != socket.IPPROTO_TCP: #Valida se o corpo do IPv6 é um pacote TCP
+            continue
+
+        print ("\n[+] ------------ Tcp Header OK ----------- [+]")
+        tcp_header = unpack.tcp_header(packet[0][54:74])
+
+        print("tcp_flag: ",tcp_header["tcp_flag"])
+        
+        # Debug print
+        # for  i in tcp_header.items():
+        #     a,b=i
+        #     print ("{} : {} | ".format(a,b))
