@@ -36,7 +36,7 @@ class RawSocket:
             except socket.timeout:
                 return ACK
             
-            if data[12:][:2] != b'\x86\xdd': #Valida se o tipo do pacote ethernet é IPv6
+            if data[12:][:2] != IPV6: #Valida se o tipo do pacote ethernet é IPv6
                 continue
 
             attackedMac = attackedHost.mac
