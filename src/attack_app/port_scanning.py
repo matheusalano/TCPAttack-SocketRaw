@@ -6,7 +6,7 @@ from enum import Enum
 from src.constants import *
 
 sourceMAC = [0x08, 0x00, 0x27, 0x10, 0x52, 0x48]
-sourceIP = '2804:14d:4c84:9530:a00:27ff:fe10:5248' #'fe80::a00:27ff:fe10:5248'
+sourceIP = MY_HOST_IP #'fe80::a00:27ff:fe10:5248'
 sourcePort = 3000
 
 destMAC = [0x8c, 0x85, 0x90, 0x43, 0xba, 0x9f] # 8c:85:90:43:ba:9f
