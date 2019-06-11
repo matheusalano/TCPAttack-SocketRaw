@@ -10,7 +10,7 @@ sourceIP = MY_HOST_IP #'fe80::a00:27ff:fe10:5248'
 sourcePort = 3000
 
 destMAC = [0x8c, 0x85, 0x90, 0x43, 0xba, 0x9f] # 8c:85:90:43:ba:9f
-destIP = '2804:389:2022:4e2a:e0f9:860a:d84:476a'
+destIP = '2804:388:e04a:4bc3:21:f204:c940:4cd6'
 
 class Attacks(Enum):
     TCP_CONNECT = 1
