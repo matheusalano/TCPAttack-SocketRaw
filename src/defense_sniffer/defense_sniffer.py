@@ -21,7 +21,7 @@ def monitoring():
         if ip_header["src_ip"] == MY_HOST_IP:
             attackerIP = ip_header["dest_ip"]
             port = tcp_header['src_port']
-            flag = tcp_flag(int(tcp_header["tcp_flag"]))
+            flag = tcp_flag(flag)
             if flag == tcp_flag.SYNACK or flag == tcp_flag.RSTACK:
                 updateIPs(attackerIP)
                 tempAttack = {'ip': attackerIP, 'flag': flag, 'port': port, 'time': time.time()}
@@ -29,7 +29,7 @@ def monitoring():
         else:
             attackerIP = ip_header["src_ip"]
             port = tcp_header['dest_port']
-            flag = tcp_flag(int(tcp_header["tcp_flag"]))
+            flag = tcp_flag(flag)
 
             if flag == tcp_flag.FIN:
                 updateIPs(attackerIP)
