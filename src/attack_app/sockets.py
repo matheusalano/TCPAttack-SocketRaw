@@ -14,14 +14,14 @@ class RawSocket:
         self.s.bind((NETWORK_INTERFACE, 0))
         self.s.settimeout(1.3)
 
-    def send(self, source: Host, dest: Host, flags: TCPFlags):
+    def send(self, source: Host, dest: Host, flags: TCPFlags, seq = 0, ack_seq = 0):
         # Ethernet header
         eth_header = packing_ethernet_header(dest.mac, source.mac)
         # IP header
         ip_header = packing_ip_header(source, dest)
 
         # tcp header fields
-        tcp_header = packing_tcp_header(source, dest, flags)
+        tcp_header = packing_tcp_header(source, dest, flags, seq, ack_seq)
             
         # final full packet - syn packets dont have any data
         packet = eth_header + ip_header + tcp_header

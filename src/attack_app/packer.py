@@ -26,11 +26,11 @@ def packing_ip_header(source, dest):
 
 
 
-def packing_tcp_header(source, dest, flags):
+def packing_tcp_header(source, dest, flags, seq, ack_seq):
     sourcePort = source.port   # source port
     destPort = dest.port   # destination port
-    seq = 0
-    ack_seq = 0
+    seq = seq
+    ack_seq = ack_seq
     doff = 5    #4 bit field, size of tcp header, 5 * 4 = 20 bytes
     #tcp flags
     fin = flags.fin
