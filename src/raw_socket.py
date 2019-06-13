@@ -1,14 +1,31 @@
 import socket 
 import struct
 from socket import AF_PACKET, SOCK_RAW
+from src.host import Host
+from src.tcpFlags import TCPFlags
 from src.constants import *
-import src.defense_sniffer.unpacker as Unpacker
+import src.utils.unpacker as Unpacker
+from src.utils.packer import packing_ethernet_header, packing_ip_header, packing_tcp_header
 
-class RawSocketDefense:
+class RawSocket:
 
     def __init__(self):
         self.s = socket.socket(AF_PACKET, SOCK_RAW, socket.htons(ETH_P_ALL))
         self.s.bind((NETWORK_INTERFACE, 0))
+
+    def send(self, source: Host, dest: Host, flags: TCPFlags, seq, ack_seq):
+        # Ethernet header
+        eth_header = packing_ethernet_header(dest.mac, source.mac)
+        # IP header
+        ip_header = packing_ip_header(source, dest)
+
+        # tcp header fields
+        tcp_header = packing_tcp_header(source, dest, flags, seq, ack_seq)
+            
+        # final full packet - syn packets dont have any data
+        packet = eth_header + ip_header + tcp_header
+
+        r = self.s.send(packet)
 
     def receive(self):
         while True:

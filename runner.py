@@ -1,7 +1,7 @@
 import sys
 import src.attack_app.port_scanning as port_scanning
 from src.attack_app.port_scanning import Attacks
-import src.defense_sniffer.defense_sniffer as defense_sniffer
+import src.defense_app.defense_sniffer as defense_sniffer
 
 runner_type = int(sys.argv[1])
 

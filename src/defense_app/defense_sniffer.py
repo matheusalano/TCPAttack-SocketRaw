@@ -1,4 +1,4 @@
-from src.defense_sniffer.raw_socket import RawSocketDefense
+from src.raw_socket import RawSocket
 from src.constants import *
 import time
 
@@ -7,7 +7,7 @@ attacks = []
 ips = []
 
 def monitoring():
-    sniffer = RawSocketDefense()
+    sniffer = RawSocket()
     
     while True:
         headers = sniffer.receive()

@@ -1,4 +1,4 @@
-import socket, struct, binascii
+import socket, struct
 
 class unpack:
  def __init__(self):
@@ -8,8 +8,8 @@ class unpack:
  def eth_header(self, data):
     data_header = struct.unpack("!6s6s2s", data)
     data = {
-        "dest_mac": binascii.hexlify(data_header[0]),
-        "source_mac": binascii.hexlify(data_header[1]),
+        "dest_mac": data_header[0],
+        "source_mac": data_header[1],
         "protocol": data_header[2],
     }
     return data
