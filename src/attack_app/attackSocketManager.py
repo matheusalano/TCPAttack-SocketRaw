@@ -9,7 +9,7 @@ class AttackSocketManager:
 
     def __init__(self):
         self.raw_socket = RawSocket()
-        self.raw_socket.s.settimeout(1.3)
+        self.raw_socket.s.settimeout(0.5)
 
     def send(self, source: Host, dest: Host, flags: TCPFlags, seq = 0, ack_seq = 0):
         
